@@ -72,4 +72,28 @@ contract NFTCollectible is ERC721Enumerable, Ownable {
         _safeMint(msg.sender, newTokenId);
         _tokenIds.increment();
     }
+
+    // ユーザーの所有NFTのリストを返す
+    function tokensOfOwner(address _owner) external view returns (uint[] memory){
+        // OwnerアドレスのToken所有数確認
+        uint tokenCount = balanceOf(_owner);
+        // 所有数分の長さを持ち、Uint(=tokenId)を格納する配列の入れ物
+        uint[] memory tokenId = new uint256[](tokenCount);
+        // 一つ一つ埋めていく
+        for (uint i = 0; i < tokenCount; i ++){
+            tokenId[i] = tokenOfOwnerByIndex(_owner, i);
+        }
+        return tokenId;
+    }
+
+    // 稼いだEtherを引き出す
+    function withdraw() public payable onlyOwner {
+        // このコントラクトに送られたEtherを確認
+        uint balance = address(this).balance;
+        // 引き出すためのEtherは残っているか？
+        require(balance > 0, "No ether left to withdraw");
+        // SenderにコントラクトのEtherを送金
+        (bool success, ) = (msg.sender).call{value: balance}("");
+        require(success, "withdraw failed");
+    }
 }
