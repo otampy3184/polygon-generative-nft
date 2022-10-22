@@ -1,31 +1,41 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
-const hre = require("hardhat");
-
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  // JSONのCIDをbaseURIに
+  const baseTokenURI = "ipfs://QmQ4xoizvEgLSmrsYGEr15Ai6wS95WptXLLN7n3vfytjq3/";
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  // オーナー/デプロイヤーのウォレットアドレスを取得する
+  const [owner] = await hre.ethers.getSigners();
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  // デプロイしたいコントラクトを取得
+  const contractFactory = await hre.ethers.getContractFactory("NFTCollectible");
 
-  await lock.deployed();
+  // 正しいコンストラクタ引数（baseTokenURI）でコントラクトをデプロイ
+  const contract = await contractFactory.deploy(baseTokenURI);
 
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  // このトランザクションがマイナーに承認（mine）されるのを待つ
+  await contract.deployed();
+
+  // コントラクトアドレスをターミナルに出力
+  console.log("Contract deployed to:", contract.address);
+
+  // NFTを 10 点、コントラクト所有者のためにキープする
+  let txn = await contract.reserveNFTs();
+  await txn.wait();
+  console.log("10 NFTs have been reserved");
+
+  // 0.03 ETH を送信して3つ NFT を mint する
+  txn = await contract.mintNFTs(3, {
+    value: hre.ethers.utils.parseEther("0.03"),
+  });
+  await txn.wait();
+
+  // コントラクト所有者の保有するtokenIdsを取得
+  let tokens = await contract.tokensOfOwner(owner.address);
+  console.log("Owner has tokens: ", tokens);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
