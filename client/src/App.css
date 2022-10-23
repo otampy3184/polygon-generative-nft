@@ -1,38 +1,84 @@
-.App {
-  text-align: center;
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 64px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.dataContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  max-width: 600px;
+}
+
+.header {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.bio {
+  text-align: center;
+  color: gray;
+  margin-top: 16px;
+}
+
+.icons{
+  overflow: hidden;
+}
+
+.dappButton {
+  float: right;
+  background-color: var(--twitter-color) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 900 !important;
+  text-transform: inherit !important;
+  border-radius: 30px !important;
+  width: 120px;
+  height: 40px !important;
+  margin-top: 5px !important;
+  margin-left: auto !important;
+  background: -webkit-linear-gradient(left, #4facfe, #00f2fe);
+  background-size: 100% 100%;
+  animation: gradient-animation 10s ease infinite;
+}
+
+.loading{
+  float: left;
+}
+
+.message {
+  font-weight: bolder;
+}
+
+.sortButton {
+  width: 200px;
+  height: 40px;
+  cursor: pointer;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  background-color: #3f92da;
   color: white;
+  padding: 5px 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.sort {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.textArea {
+  cursor: pointer;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  background-color: #90c3ef;
+  color: white;
+  padding: 5px 20px;
 }
