@@ -51,15 +51,15 @@ function App() {
       console.log(error);
     }
   }
-  
-  const mintNftHandler = async() => {
+
+  const mintNftHandler = async () => {
     try {
       const { ethereum } = window;
 
-      if(ethereum){
+      if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        const nftContract = new ethers.Contract(contractAddress, abi, signer);
+        const nftContract = new ethers.Contract(contractAddress, contractABI, signer);
 
         console.log("initialize payment");
         let nftTxn = await nftContract.mintNFTs(1, {
@@ -70,10 +70,10 @@ function App() {
         await nftTxn.wait();
 
         console.log(`Mined, see transaction: ${nftTxn.hash}`);
-      }else {
+      } else {
         console.log("Ethereum object does not exist");
       }
-    } catch (err){
+    } catch (err) {
       console.log(err);
     }
   };
@@ -87,15 +87,17 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="main-app">
       <div>
         {!currentAccount && (
-          <button className="dappButton" onClick={connectWallet}>
+          <button className="dappButton cta-button" onClick={connectWallet}>
             Connect Wallet
           </button>
         )}
         {currentAccount && (
-            <mintNftButton />
+          <button className="dappButton cta-button" onClick={mintNftHandler}>
+            Mint NFT
+          </button>
         )}
       </div>
     </div>

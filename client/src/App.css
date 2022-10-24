@@ -29,7 +29,6 @@
 }
 
 .dappButton {
-  float: right;
   background-color: var(--twitter-color) !important;
   border: none !important;
   color: white !important;
@@ -81,4 +80,18 @@
   background-color: #90c3ef;
   color: white;
   padding: 5px 20px;
+}
+
+.main-app {
+  text-align: center;
+  margin: 100px;
+}
+
+.cta-button {
+  border: none;
+  border-radius: 12px;
+  min-width: 250px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
 }
